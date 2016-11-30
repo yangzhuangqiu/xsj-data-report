@@ -45,7 +45,7 @@ public class ReportAdminDB implements TransactionManagementConfigurer{
         hiConfig.setUsername(reportAdminDBConfig.getDBUser());
         hiConfig.setPassword(reportAdminDBConfig.getDBPassword());
         DataSource dataSource = new HikariDataSource(hiConfig);
-        log.info(">>>>dataSource init success:" + dataSource);
+        log.info(">>>>dataSource init success:" + dataSource + "[jdbc:mysql://" + reportAdminDBConfig.getDBHost() + ":" + reportAdminDBConfig.getDBPort() + "/" + reportAdminDBConfig.getDBName()+"]");
         return dataSource;
     }
     

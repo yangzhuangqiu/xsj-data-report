@@ -15,6 +15,7 @@ import com.xsj.data.report.dao.ReportAdminDAO;
 import com.xsj.data.report.domain.ReportAppConfig;
 import com.xsj.data.report.service.FlumeSinkService;
 import com.xsj.data.report.service.ReportService;
+import com.xsj.data.report.utils.C;
 import com.xsj.data.report.utils.U;
 
 @Service("reportService")
@@ -25,7 +26,7 @@ public class ReportServiceImpl implements ReportService{
 	@Autowired
 	private ReportAdminDAO reportAdminDAO;
 	
-	@Autowired
+	@Autowired(required=false)
 	private FlumeSinkService flumeSinkService;
 	
 	@Override
@@ -33,13 +34,13 @@ public class ReportServiceImpl implements ReportService{
 		
 		String appId = request.getParameter("appId");
 		if(StringUtils.isBlank(appId)){
-			log.warn("**** appId is empty, request ip is [{}]****", U.getClientIp(request));
+			log.warn("**** appId is empty, request ip is [{}]****", C.getRealIp());
 			return ;
 		}
 		
 		ReportAppConfig config = reportAdminDAO.getReportAppConfigByAppId(appId);
 		if(null == config){
-			log.warn("**** appId is not register, request ip is [{}]****", U.getClientIp(request));
+			log.warn("**** appId is not register, request ip is [{}]****", C.getRealIp());
 			return ;
 		}
 		

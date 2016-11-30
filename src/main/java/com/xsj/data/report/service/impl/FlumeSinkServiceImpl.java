@@ -39,7 +39,7 @@ public class FlumeSinkServiceImpl implements FlumeSinkService{
 	
 	private RpcClient rpcClient;
 	
-	@PostConstruct
+	//@PostConstruct
 	public void init(){
 		try {
 			if (null == rpcClient) {
@@ -53,7 +53,7 @@ public class FlumeSinkServiceImpl implements FlumeSinkService{
 		}
 	}
 	
-	@PreDestroy
+	//@PreDestroy
 	public void stop() {
 		if (rpcClient != null) {
 			try {

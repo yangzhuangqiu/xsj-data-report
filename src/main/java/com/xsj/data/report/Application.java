@@ -7,6 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
+//@ServletComponentScan
 public class Application {
 
 	static private ApplicationContext ctx;
