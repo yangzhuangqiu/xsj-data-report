@@ -9,329 +9,32 @@
 		
 	};
 	
-	//跟踪器
-	var defaultTrackerName = "t0";
-	var tracker = function(options){
-		
-		if (typeof options !== 'object') {
-            throw('AV.analytics need a argument at least.');
-        }
-        else if (!options.appId) {
-            throw('Options must have appId.');
-        }
-        else if (!options.trackingId) {
-            throw('Options must have trackingId.');
-        }
-		
-		var data = {};
-		data.keys=["name","appId","trackingId"];
-		data.values={};
-		
-		data.values.name = options.name || defaultTrackerName;
-		data.values.appId = options.appId;
-		data.values.trackingId = options.trackingId
-		
-		var collect = function(){
-			
-			
-		}
-		
-		
-		var send = function(options){
-			log("send");
-		}
-		
-	}
+	var O = win, M = doc;
+	
+	
+	
+	//====================================start by shadow_====================================
+	
+	
+	//====================================配置项:start====================================
+	var configName = "XSJAnalyticsConfig";
+	//====================================配置项:end====================================
 	
 	
 	
 	
-
-	//跟踪器持有者
-	var trackerHolder = {
-		
-		keys : [],
-		
-		values : {},
-		
-		add : function(trackerObject){
-			var name = trackerObject.data.values.name;
-			this.keys[this.keys.length] = name;
-			this.values[name] = trackerObject;
-			
-		},
-		
-		get : function(name){
-			return this.values[name];
-		},
-		
-		getOnlyOne : function(){
-			if(this.keys.length == 1){
-				return this.values[this.keys[0]];
-			}
-			return null;
-		},
-		
-		getAll : function(){
-			return this.values;//应该返回对象的副本
-		}
-	}
-	
-	
-	//win[win["XSJAnalyticsConfig"]].q
-	
-	//用来替换xa的函数
-	var localxa = function(cmd, options){
-		
-		if(1==arguments.length && typeof cmd === "function"){
-			cmd(trackerHolder.getOnlyOne());
-		}else if(arguments.length == 2 && typeof cmd === "string" && typeof options === 'object'){
-			var cmds = cmd.split(".");
-			var t = defaultTrackerName;
-			if(cmds.length == 2){
-				cmd = cmds[1];
-				t = cmds[0];
-			}
-			if("create" == cmd){
-				trackerObject = new tracker(options);
-				trackerHolder.add(trackerObject);
-			}else if("send" == cmd){
-				trackerHolder.get(t) && trackerHolder.get(t).send(options);
-			}
-			
-		}
-
-	}
-	
-	//xa扩展方法
-	localxa.prototype.getAll = trackerHolder.getAll;
-	
-	//执行xa命令
-	var xa = win["XSJAnalyticsConfig"] || "xa";
-	var queue = win[xa].q;
-	
-	var notCreateQueue = [];
-
-	//创建跟踪器
-	for(x in queue){
-		var o = queue[x];
-		if(o.length == 2 && "create" == o[0]){
-			localxa(o[0], o[1]);
-		}else{
-			notCreateQueue.push(o);
-		}
-	}
-	log(queue)
-	log(notCreateQueue)
-	//替换xa
-	win.xa = localxa
-	
-	
-	for(x in notCreateQueue){
-		var o = notCreateQueue[x];
-		if(o.length == 2){
-			win.xa(o[0], o[1]);
-		}else{
-			win.xa(o[0]);
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//Ya
-	var Ya = function() {
-        this.data = new ee
-    },
-	
-	//bc构造函数（即跟踪器构造函数）
-	var wb = /^(UA|YT|MO|GP)-(\d+)-(\d+)$/, pc = function(a) {
-        function b(a, b) {
-            d.b.data.set(a, b)
-        }
-        function c(a, c) {
-            b(a, c);
-            d.filters.add(a)
-        }
-        var d = this;
-        this.b = new Ya;
-        this.filters = new Ha;
-        b(V, a[V]);
-        b(Na, sa(a[Na]));
-        b(U, a[U]);
-        b(W, a[W] || xa());
-        b(Yb, a[Yb]);
-        b(Zb, a[Zb]);
-        b(legacyCookieDomain, a[legacyCookieDomain]);
-        b(Wc, a[Wc]);
-        b(bc, a[bc]);
-        b(cc, a[cc]);
-        b(Ka, a[Ka]);
-        b(dc, a[dc]);
-        b(ec, a[ec]);
-        b(ac, a[ac]);
-        b(Ad, a[Ad]);
-        b(n, a[n]);
-        b(hb, 1);
-        b(ib, "j47");
-        c(Qb, Ma);
-        c(dd, cd);
-        c(Rb, Oa);
-        c(md, vb);
-        c(Sb, nc);
-        c(Uc, Yc);
-        c(Tb, Ja);
-        c(Vb, Ta);
-        c(Vc, Hc);
-        c(zd, yd);
-        c(Ld, Sd);
-        c(Wb, Pa);
-        c(Xb, Sa);
-        c(Cd, Fd(this));
-        Jc(this.b, a[Q]);
-        Kc(this.b);
-        this.b.set(jb, Lc());
-        bd(this.b.get(Na), this.b.get(W), this.b.get(Yb))
-    },
-	
-	
-	
-	
-	
-	//Na对象
-	var Qb = T("_oot"), dd = S("previewTask"), Rb = S("checkProtocolTask"), md = S("validationTask"), Sb = S("checkStorageTask"), Uc = S("historyImportTask"), Tb = S("samplerTask"), Vb = S("_rlt"), Wb = S("buildHitTask"), Xb = S("sendHitTask"), Vc = S("ceTask"), zd = S("devIdTask"), Cd = S("timingTask"), Ld = S("displayFeaturesTask"), 
-	V = T("name"), Q = T("clientId", "cid"), n = T("clientIdTime"), Ad = S("userId", "uid"), 
-	Na = T("trackingId", "tid"), U = T("cookieName", void 0, "_ga"), 
-	W = T("cookieDomain"), Yb = T("cookiePath", void 0, "/"), Zb = T("cookieExpires", void 0, 63072E3), legacyCookieDomain = T("legacyCookieDomain"), Wc = T("legacyHistoryImport", void 0, !0), ac = T("storage", void 0, "cookie"), bc = T("allowLinker", void 0, !1), cc = T("allowAnchor", void 0, !0), Ka = T("sampleRate", "sf", 100), dc = T("siteSpeedSampleRate", void 0, 1), ec = T("alwaysSendReferrer", void 0, !1), gd = S("transportUrl"), Md = S("_r", "_r");
-	//za函数:将创建参数整合成对象{name:"xx",trackingId:"",cookieDomain:""}
-	za = function(a, b) {
-        if (1 == b.length && null != b[0] && "object" === typeof b[0]) return b[0];
-        for (var c = {}, d = Math.min(a.length + 1, b.length), e = 0; e < d; e++) if ("object" === typeof b[e]) {
-            for (var g in b[e]) b[e].hasOwnProperty(g) && (c[g] = b[e][g]);
-            break
-        } else e < a.length && (c[a[e]] = b[e]);
-        return c
-    };
-	
-	var N = function(a) {
-        J(1);
-        Z.D.apply(Z, [arguments])
-    }; N.h = {}; N.P = []; N.L = 0; N.answer = 42;
-	var uc = [Na, W, V]; N.create = function(a) {
-        var b = za(uc, [].slice.call(arguments));
-        b[V] || (b[V] = "t0");
-        var c = "" + b[V];
-        if (N.h[c]) return N.h[c];
-        b = new pc(b);
-        N.h[c] = b;
-        N.P.push(b);
-        return b
-    }; N.remove = function(a) {
-        for (var b = 0; b < N.P.length; b++) if (N.P[b].get(V) == a) {
-            N.P.splice(b, 1);
-            N.h[a] = null;
-            break
-        }
-    }; N.j = function(a) {
-        return N.h[a]
-    }; N.getAll = function() {
-        return N.P.slice(0)
-    };
-	
-	//T函数
-	T = function(a, b, c) {
-        return S(a, b, c, void 0, db)
-    },
-	//bd对象
-	var ad, bd = function(a, b, c) {
-        if (!ad) {
-            var d;
-            d = M.location.hash;
-            var e = O.name,
-            g = /^#?gaso=([^&]*)/;
-            if (e = (d = (d = d && d.match(g) || e && e.match(g)) ? d[1] : Ca("GASO")[0] || "") && d.match(/^(?:!([-0-9a-z.]{1,40})!)?([-.\w]{10,1200})$/i)) zc("GASO", "" + d, c, b, a, 0),
-            window._udo || (window._udo = b),
-            window._utcp || (window._utcp = c),
-            a = e[1],
-            wa("https://www.google.com/analytics/web/inpage/pub/inpage.js?" + (a ? "prefix=" + a + "&": "") + hd(), "_gasojs");
-            ad = !0
-        }
-    };
-	
-	//S函数
-	S = function(a, b, c, d, e) {
-        a = new bb(a, b, c, d, e);
-        Qa.set(a.name, a);
-        return a.name
-    }
-	//bb构造函数
-	bb = function(a, b, c, d, e) {
-        this.name = a;
-        this.F = b;
-        this.Z = d;
-        this.o = e;
-        this.defaultValue = c
-    },
-	//Qa对象
-	var ee = function() {
-        this.keys = [];
-        this.values = {};
-        this.m = {}
-    }; ee.prototype.set = function(a, b, c) {
-        this.keys.push(a);
-        c ? this.m[":" + a] = b: this.values[":" + a] = b
-    }; ee.prototype.get = function(a) {
-        return this.m.hasOwnProperty(":" + a) ? this.m[":" + a] : this.values[":" + a]
-    }; ee.prototype.map = function(a) {
-        for (var b = 0; b < this.keys.length; b++) {
-            var c = this.keys[b],
-            d = this.get(c);
-            d && a(c, d)
-        }
-    };
-	Qa = new ee
-	var O = window, M = document;
-	
-	//截取跟踪器及方法
-	var td = /^(?:(\w+)\.)?(?:(\w+):)?(\w+)$/, sc = function(a) {
-		//
-		
-        if (ea(a[0])) this.u = a[0];//u为函数
-        else {
-            var b = td.exec(a[0]);
-            null != b && 4 == b.length && 
-			//c是跟踪器，C是方法，a是参数，
-			(this.c = b[1] || "t0", this.K = b[2] || "", this.C = b[3], this.a = [].slice.call(a, 1), 
-			//A ->isCreate,i ->isRequire,g -> isProvide, ba -> isRemove
-			this.K || (this.A = "create" == this.C, this.i = "require" == this.C, this.g = "provide" == this.C, this.ba = "remove" == this.C), 
-			this.i && (3 <= this.a.length ? (this.X = this.a[1], this.W = this.a[2]) : this.a[1] && (qa(this.a[1]) ? this.X = this.a[1] : this.W = this.a[1])));
-            b = a[1];
-            a = a[2];
-            if (!this.C) throw "abort";
-            if (this.i && (!qa(b) || "" == b)) throw "abort";
-            if (this.g && (!qa(b) || "" == b || !ea(a))) throw "abort";
-            if (ud(this.c) || ud(this.K)) throw "abort";
-            if (this.g && "t0" != this.c) throw "abort";
-        }
-    };
-	
-	
-	
-	//============================================start:shadow_===============================================================
-	
-	var configName = "XSJAnalyticsConfig"
 	
 	//====================================辅助方法 start====================================
+	
+	//Ba
+	var isForceSSL = !1;
+	
+	//Ud
+	var isHttps = function() {
+        return "https:" == M.location.protocol
+    },
 	//参数是否函数,ea
-	var isFunction = function(a) {
+	isFunction = function(a) {
         return "function" == typeof a
     },
 	//参数是否数组,ka
@@ -348,8 +51,8 @@
     };
 	
 	//检验方法：
-	function isNotValidateName(a) {
-        return 0 <= a.indexOf(".") || 0 <= a.indexOf(":")
+	var isNotValidateName = function(name) {
+        return 0 <= name.indexOf(".") || 0 <= name.indexOf(":")
     };
 	
 	//生成参数对象//za函数:将创建参数整合成对象{name:"xx",trackingId:"",cookieDomain:""}
@@ -376,13 +79,13 @@
     };
 	
 	//K
-	encURI = function(a) {
+	var encURI = function(a) {
         if (encodeURIComponent instanceof Function) return encodeURIComponent(a);
         
         return a
-    },
-	
-	var Ca = function(a) {
+    };
+	//Ca
+	var getCookie = function(a) {
         var b = [],
         c = doc.cookie.split(";");
         a = new RegExp("^\\s*" + a + "=\\s*(.*?)\\s*$");
@@ -392,30 +95,40 @@
         }
         return b
     },
-	zc = function(cookieName, clientId, c, d, trackingId, g) {
+	//zc name, value, expires, path, domain, secure//确保写入->,没有写入返回0
+	setCookie = function(name, value, path, domain, trackingId, expires) {
        
-        clientId && 1200 < clientId.length && (clientId = clientId.substring(0, 1200));
-        c = cookieName + "=" + clientId + "; path=" + c + "; ";
-        g && (c += "expires=" + (new Date((new Date).getTime() + g)).toGMTString() + "; ");
-        d && "none" != d && (c += "domain=" + d + ";");
-        d = doc.cookie;
-        doc.cookie = c;
-        if (! (d = d != doc.cookie)) cookieName: {
-            cookieName = Ca(cookieName);
-            for (d = 0; d < cookieName.length; d++) if (clientId == cookieName[d]) {
+        value && 1200 < value.length && (value = value.substring(0, 1200));
+        path = name + "=" + value + "; path=" + path + "; ";
+        expires && (path += "expires=" + (new Date((new Date).getTime() + expires)).toGMTString() + "; ");
+        domain && "none" != domain && (path += "domain=" + domain + ";");
+        var d = doc.cookie;
+        doc.cookie = path;
+        if (! (d = d != doc.cookie)) tag: {
+            name = getCookie(name);
+            for (d = 0; d < name.length; d++) if (value == name[d]) {
                 d = !0;
-                break cookieName
+                break tag
             }
             d = !1
         }
         return d
-    },
+    };
 	
 	//Cc
-	replaceParenthesis = function(a) {
+	var replaceParenthesis = function(a) {
         return encURI(a).replace(/\(/g, "%28").replace(/\)/g, "%29")
-    },
+    };
 	
+	var La = function(a) {
+        var b = 1,
+        c, d;
+        if (a) for (b = 0, d = a.length - 1; 0 <= d; d--) c = a.charCodeAt(d),
+        b = (b << 6 & 268435455) + c + (c << 14),
+        c = b & 266338304,
+        b = 0 != c ? b ^ c >> 21 : b;
+        return b
+    };
 	//hd
 	var getRandomByMathRound = function() {
         return Math.round(2147483647 * Math.random())
@@ -424,183 +137,76 @@
     getRandom = function() {
         try {
             var a = new Uint32Array(1);
-            O.crypto.getRandomValues(a);
+            win.crypto.getRandomValues(a);
             return a[0] & 2147483647
         } catch(b) {
             return getRandomByMathRound()
         }
     };
 	
-	lc = function(a) {
+	//lc
+	var trimFirstDot = function(a) {
         return 0 == a.indexOf(".") ? a.substr(1) : a
-    };
-	
-	kc = function(a) {
+    },
+	//kc 确保格式为：/a/b/c
+	getPath = function(a) {
         if (!a) return "/";
         1 < a.length && a.lastIndexOf("/") == a.length - 1 && (a = a.substr(0, a.length - 1));
         0 != a.indexOf("/") && (a = "/" + a);
         return a
     },
-	jc = function(a) {
-        a = kc(a);
-        return "/" == a ? 1 : a.split("/").length
+	//jc 获取路径深度：/a/b/c -> 4,/->1
+	getDeepByPath = function(path) {
+        path = getPath(path);
+        return "/" == path ? 1 : path.split("/").length
     };
 	//====================================辅助方法 end====================================
 	
-	//====================================校验方法 start====================================
-	//TODO 理解优化
-	function Ma(a) {
-        //if (G(P(a, Na))) throw "abort";Na->param_trackingId
-    }
-	
-	function cd() {
-        if (win.navigator && "preview" == win.navigator.loadPurpose) throw "abort";
-    }
-	
-	function Oa() {
-        var a = doc.location.protocol;
-        if ("http:" != a && "https:" != a) throw "abort";
-    }
-	
-	function vb(a) {
-        if (!a.get(param_trackingId)) throw "abort";
-    }
-	
-	
-	
-	nd = function(a) {
-        var b = replaceParenthesis(getStringProperty(a, param_clientId)),
-        c = lc(getStringProperty(a, param_cookieDomain)).split(".").length;
-        a = jc(getStringProperty(a, param_cookiePath));
-        1 < a && (c += "-" + a);
-        return ["GA1", c, b].join(".")
-    },
-	
-	var hc = !1, mc = function(a) {
-        if ("cookie" == getStringProperty(a, param_storage)) {
-            var b = getStringProperty(a, param_cookieName),
-            c = nd(a),
-            d = kc(getStringProperty(a, param_cookiePath)),
-            e = lc(getStringProperty(a, param_cookieDomain)),
-            g = 1E3 * getNumberProperty(a, param_cookieExpires),
-            ca = getStringProperty(a, param_trackingId);
-            if ("auto" != e) zc(b, c, d, e, ca, g) && (hc = !0);
-            else {
-                J(32);
-                var l;
-                a: {
-                    c = [];
-                    e = xa().split(".");
-                    if (4 == e.length && (l = e[e.length - 1], parseInt(l, 10) == l)) {
-                        l = ["none"];
-                        break a
-                    }
-                    for (l = e.length - 2; 0 <= l; l--) c.push(e.slice(l).join("."));
-                    c.push("none");
-                    l = c
-                }
-                for (var k = 0; k < l.length; k++) if (e = l[k], a.data.set(W, e), c = nd(a), zc(b, c, d, e, ca, g)) {
-                    hc = !0;
-                    return
-                }
-                a.data.set(W, "auto")
-            }
-        }
-    },
-	nc = function(a) {
-        //if ("cookie" == P(a, ac) && !hc && (mc(a), !hc)) throw "abort";
-    },
-	//TODO
-	Yc = function(a) {
-        
-    },
-	function Ja(a) {
-        //if (100 != a.get(Ka) && La(P(a, Q)) % 1E4 >= 100 * R(a, Ka)) throw "abort";
-    },
 	
 	
 	
 	
-	function Ta(a) {
-        
-    };
-	
-	function Hc(a) { 
-	
-    }
-	
-	function yd(a) {
-        var b = win.gaDevIds;
-        isArray(b) && 0 != b.length && a.set("&did", b.join(","), !0)
-    }
-	//Ba
-	var isForceSSL = !1;
-	
-	//Ud
-	isHttps = function() {
-        return "https:" == M.location.protocol
-    },
-	
-	var oc = function() {
-		//return "http://www.noshadow.me";
-        return (isForceSSL || isHttps() ? "https:": "http:") + "//www.google-analytics.com"
-    },
-	//可能很重要,设置上报接口地址
-	var Sd = function(a) {
-        if (!a.get("dcLoaded") && "cookie" == a.get(param_storage)) {
-            //Nd(a, 51);
-            //var b = new Jd(a);
-            //Pd(b, a);
-            //Qd(b, a);
-            //a.get(b.U) && (a.set(Md, 1, !0), a.set(param_transportUrl, oc() + "/r/collect", !0))
-        }
-    };
-	
-	
-	
-	
-	
-	function Pa(a) {
-        try {
-            win.navigator.sendBeacon ? 1 : win.XMLHttpRequest && "withCredentials" in new win.XMLHttpRequest && 1
-        } catch(c) {}
-        //a.set(ld, Td(a), !0);TODO UNKNOWN
-        a.set(param__s, getNumberProperty(a, param__s) + 1);
-        var b = [];
-        dataStoreInstance.map(function(c, d) {
-            if (d.F) {
-                var e = a.get(c);
-                void 0 != e && e != d.defaultValue && ("boolean" == typeof e && (e *= 1), b.push(d.F + "=" + encURI("" + e)))
-            }
-        });
-        b.push("z=" + getRandom());
-        a.set(param_hitPayload, b.join("&"), !0)
-    }
-	
-	//TODO
-	function Sa(a) {
-        
-    }
-	//TODO
-	Fd = function(a) {
-        
-    };
-	
-	//====================================校验方法 end====================================
-	
-	
-	
-	
-	
-	
-	//====================================数据收集方法 start====================================
+	//====================================数据收集方法:start====================================
+	//xa
 	var getHostName = function() {
         var a = "" + doc.location.hostname;
         return 0 == a.indexOf("www.") ? a.substring(4) : a
     },
-	//====================================数据收集方法 end====================================
-	
-	
+	//ya
+	getReferrer = function(a) {
+        var b = M.referrer;
+        if (/^https?:\/\//i.test(b)) {
+            if (a) return b;
+            a = "//" + M.location.hostname;
+            var c = b.indexOf(a);
+            if (5 == c || 6 == c) if (a = b.charAt(c + a.length), "/" == a || "?" == a || "" == a || ":" == a) return;
+            return b
+        }
+    },
+	//fc
+	getFlashVersion = function () {
+        var a, b, c;
+        if ((c = (c = O.navigator) ? c.plugins: null) && c.length) for (var d = 0; d < c.length && !b; d++) {
+            var e = c[d]; - 1 < e.name.indexOf("Shockwave Flash") && (b = e.description)
+        }
+        if (!b) try {
+            a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7"),
+            b = a.GetVariable("$version")
+        } catch(g) {}
+        if (!b) try {
+            a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6"),
+            b = "WIN 6,0,21,0",
+            a.AllowScriptAccess = "always",
+            b = a.GetVariable("$version")
+        } catch(g) {}
+        if (!b) try {
+            a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash"),
+            b = a.GetVariable("$version")
+        } catch(g) {}
+        b && (a = b.match(/[\d]+/g)) && 3 <= a.length && (b = a[0] + "." + a[1] + " r" + a[2]);
+        return b || void 0
+    };
+	//====================================数据收集方法:end====================================
 	
 	
 	
@@ -619,55 +225,41 @@
         c ? this.m[":" + key] = value: this.values[":" + key] = value
     }; dataStore.prototype.get = function(key) {
         return this.m.hasOwnProperty(":" + key) ? this.m[":" + key] : this.values[":" + key]
-    }; dataStore.prototype.map = function(a) {
-        for (var b = 0; b < this.keys.length; b++) {
-            var c = this.keys[b],
-            d = this.get(c);
-            d && a(c, d)
+    }; dataStore.prototype.map = function(a) {//a为函数，将所有key-value交给函数a处理
+        for (var i = 0; i < this.keys.length; i++) {
+            var key = this.keys[i],
+            value = this.get(c);
+            value && a(c, d)
         }
-    };
-	//数据存储实例 Qa
-	var dataStoreInstance = new dataStore;
+    };	
 	
 	//字段模型 bb(名字，别名，默认值，getFunction，setFunction)
-	var fieldModel = function(a, b, c, d, e) {
-        this.name = a;
-        this.F = b;
-		this.defaultValue = c;
-		this.getFunc = d;//Z
-        this.setFunc = e;//o
+	var fieldModel = function(_name, _alias, _defaultValue, _getFunc, _setFunc) {
+        this.name = _name;
+        this.alias = _alias;//F
+		this.defaultValue = _defaultValue;
+		this.getFunc = _getFunc;//Z
+        this.setFunc = _setFunc;//o
     };
 	
-	
+	//全局数据存储实例 Qa
+	var dataStoreInstance = new dataStore;
 	//$a
-	getValueInDataStoreInstance = function(key) {
+	var getValueInDataStoreInstance = function(key) {
         var b = dataStoreInstance.get(key);
-        if (!b) for (var c = 0; c < Za.length; c++) {
-            var d = Za[c],
-            e = d[0].exec(key);
-            if (e) {
-                b = d[1](e);
-                dataStoreInstance.set(b.name, b);
-                break
-            }
-        }
         return b
     };
 	
 	//ab
 	var setToDataWrapper = function(dataWrapper, key, value, d) {
-        if (void 0 != value) switch (key) {
-        case param_trackingId:
-            wb.test(value)
-        }
         var e = getValueInDataStoreInstance(key);
         e && e.setFunc ? e.setFunc(dataWrapper, key, value, d) : dataWrapper.data.set(key, value, d)
-    },
+    };
 	
 	//Ya
 	var DataWrapper = function() {
         this.data = new dataStore
-    }, Za = []; 
+    }; 
 	DataWrapper.prototype.get = function(a) {
         var b = getValueInDataStoreInstance(a),
         c = this.data.get(a);
@@ -697,19 +289,228 @@
 	
 	//====================================数据存储模型 end====================================
 	
+
+	
+	//====================================校验方法 start====================================
+	//TODO 理解优化
+	var Ma = function (a) {
+        //if (G(P(a, Na))) throw "abort";Na->param_trackingId
+    },
+	
+	cd = function () {
+        //if (win.navigator && "preview" == win.navigator.loadPurpose) throw "abort";
+    },
+	
+	Oa = function () {
+        //var a = doc.location.protocol;
+        //if ("http:" != a && "https:" != a) throw "abort";
+    },
+	
+	vb = function (a) {
+        //if (!a.get(param_trackingId)) throw "abort";
+    },
+	
+	
+	//nd
+	generateCookieValue = function(a) {
+        var b = replaceParenthesis(getStringProperty(a, param_clientId)),
+        c = trimFirstDot(getStringProperty(a, param_cookieDomain)).split(".").length;
+        a = getDeepByPath(getStringProperty(a, param_cookiePath));
+        1 < a && (c += "-" + a);
+        return ["GA1", c, b].join(".")
+    };
+	//setCookie = function(name, value, path, domain, trackingId, expires)
+	//hc->hasSetTrackerCookieValue,mc->setTrackerCookieValue
+	var hasSetTrackerCookieValue = !1, setTrackerCookieValue = function(a) {
+        if ("cookie" == getStringProperty(a, param_storage)) {
+            var name = getStringProperty(a, param_cookieName),
+            value = generateCookieValue(a),
+			
+            path = getPath(getStringProperty(a, param_cookiePath)),
+            domain = trimFirstDot(getStringProperty(a, param_cookieDomain)),
+            expires = 1E3 * getNumberProperty(a, param_cookieExpires),
+            trackingId = getStringProperty(a, param_trackingId);
+            if ("auto" != domain) setCookie(name, value, path, domain, trackingId, expires) && (hasSetTrackerCookieValue = !0);
+            else {
+                
+                var l;
+                tag: {
+                    value = [];
+                    e = getHostName().split(".");
+                    if (4 == e.length && (l = e[e.length - 1], parseInt(l, 10) == l)) {
+                        l = ["none"];
+                        break tag
+                    }
+                    for (l = e.length - 2; 0 <= l; l--) value.push(e.slice(l).join("."));
+                    value.push("none");
+                    l = value
+                }
+                for (var k = 0; k < l.length; k++) if (e = l[k], a.data.set(param_cookieDomain, e), value = generateCookieValue(a), setCookie(name, value, path, e, trackingId, expires)) {
+                    hasSetTrackerCookieValue = !0;
+                    return
+                }
+                a.data.set(param_cookieDomain, "auto")
+            }
+        }
+    },
+	nc = function(a) {
+        //if ("cookie" == P(a, ac) && !hc && (mc(a), !hc)) throw "abort";
+    },
+	//TODO
+	Yc = function(a) {
+        
+    },
+	Ja = function (a) {
+        //if (100 != a.get(Ka) && La(P(a, Q)) % 1E4 >= 100 * R(a, Ka)) throw "abort";
+    },
+	
+	
+	
+	
+	Ta = function (a) {
+        
+    },
+	
+	Hc = function (a) { 
+	
+    },
+	
+	yd = function (a) {
+        //var b = win.gaDevIds;
+        //isArray(b) && 0 != b.length && a.set("&did", b.join(","), !0)
+    };
+	
+	
+	var oc = function() {
+		//return "http://www.noshadow.me";
+        return (isForceSSL || isHttps() ? "https:": "http:") + "//www.google-analytics.com"
+    };
+	//可能很重要,设置上报接口地址
+	var Sd = function(a) {
+        if (!a.get("dcLoaded") && "cookie" == a.get(param_storage)) {
+            //Nd(a, 51);
+            //var b = new Jd(a);
+            //Pd(b, a);
+            //Qd(b, a);
+            //a.get(b.U) && (a.set(Md, 1, !0), a.set(param_transportUrl, oc() + "/r/collect", !0))
+        }
+    };
+	
+	
+	
+	
+	
+	var Pa = function (a) {
+        try {
+            win.navigator.sendBeacon ? 1 : win.XMLHttpRequest && "withCredentials" in new win.XMLHttpRequest && 1
+        } catch(c) {}
+        //a.set(ld, Td(a), !0);TODO UNKNOWN
+        a.set(param__s, getNumberProperty(a, param__s) + 1);
+        var b = [];
+        dataStoreInstance.map(function(c, d) {
+            if (d.alias) {
+                var e = a.get(c);
+                void 0 != e && e != d.defaultValue && ("boolean" == typeof e && (e *= 1), b.push(d.alias + "=" + encURI("" + e)))
+            }
+        });
+        b.push("z=" + getRandom());
+        a.set(param_hitPayload, b.join("&"), !0)
+    },
+	
+	//TODO
+	Sa = function (a) {
+        
+    },
+	//TODO
+	Fd = function(a) {
+        
+    };
+	
+	//Jc->setClientId,a是dataWarpper
+	var setClientId = function(a, b) {
+        if ("cookie" == getStringProperty(a, param_storage)) {
+            hasSetTrackerCookieValue = !1;
+			
+			var d = getCookie(getStringProperty(a, param_cookieName));
+			//有_ga的cookie值，提取clientId
+			if(d && !(1 > d.length)){
+				
+				c = [];
+				for (var e = 0; e < d.length; e++) {
+					var g;
+					g = d[e].split(".");
+					var ca = g.shift();
+					("GA1" == ca) && 1 < g.length ? (ca = g.shift().split("-"), 1 == ca.length && (ca[1] = "1"), ca[0] *= 1, ca[1] *= 1, g = {
+						H: ca,
+						s: g.join(".")
+					}) : g = void 0;
+					g && c.push(g)
+				}
+
+				//if (1 == c.length) {
+                //}
+				
+				c = c[0].s;
+				c && (a.data.set(param_clientId, c), hasSetTrackerCookieValue = !0)
+			}else{
+				
+				c = win.navigator.userAgent + (doc.cookie ? doc.cookie: "") + (doc.referrer ? doc.referrer: "");
+				d = c.length;
+				for (e = win.history.length; 0 < e;) c += e--^d++;
+				a.data.set(param_clientId, [getRandomByMathRound() ^ La(c) & 2147483647, Math.round((new Date).getTime() / 1E3)].join("."))
+			}
+			
+			setTrackerCookieValue(a);
+		}
+    },
+	//Kc
+    collect = function(a) {
+        var b = win.navigator,
+        c = win.screen,
+        d = doc.location;
+        a.set(param_referrer, getReferrer(a.get(param_alwaysSendReferrer)));
+        if (d) {
+            var e = d.pathname || "";
+            "/" != e.charAt(0) && (e = "/" + e);
+            a.set(param_location, d.protocol + "//" + d.hostname + e + d.search)
+        }
+        c && a.set(param_screenResolution, c.width + "x" + c.height);
+        c && a.set(param_screenColors, c.colorDepth + "-bit");
+        var c = M.documentElement,
+        g = (e = M.body) && e.clientWidth && e.clientHeight,
+        ca = [];
+        c && c.clientWidth && c.clientHeight && ("CSS1Compat" === M.compatMode || !g) ? ca = [c.clientWidth, c.clientHeight] : g && (ca = [e.clientWidth, e.clientHeight]);
+        c = 0 >= ca[0] || 0 >= ca[1] ? "": ca.join("x");
+        a.set(param_viewportSize, c);
+        a.set(param_flashVersion, getFlashVersion());
+        a.set(param_encoding, M.characterSet || M.charset);
+        a.set(param_javaEnabled, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
+        a.set(param_language, (b && (b.language || b.browserLanguage) || "").toLowerCase());
+        
+    }; 
+	
+	//====================================校验方法 end====================================
+	
+	
+	
+	
+
+	
+	
+	
 	
 	//====================================常量定义 start====================================
 	
-	db = function() {};
+	var db = function() {};
 	//由T,S定义的常量，存放在全局数据存储实例(dataStoreInstance)中
 	//T函数
-	var T = function(a, b, c) {
-        return S(a, b, c, void 0, db)
+	var T = function(_name, _alias, _defaultValue) {
+        return S(_name, _alias, _defaultValue, void 0, db)
     },
 	
 	//S函数
-	S = function(a, b, c, d, e) {
-        a = new fieldModel(a, b, c, d, e);
+	S = function(_name, _alias, _defaultValue, _getFunc, _setFunc) {
+        a = new fieldModel(_name, _alias, _defaultValue, _getFunc, _setFunc);
         dataStoreInstance.set(a.name, a);
         return a.name
     };
@@ -759,20 +560,44 @@
 	
 	var param__s = S("_s", "_s");//Ac
 	
+	//
+	var param_location = S("location", "dl", ""), //kb
+	param_referrer = S("referrer", "dr"),//lb
+	param_page = S("page", "dp", ""); //mb
+	S("hostname", "dh");
+	
+	var param_screenColors = S("screenColors", "sd"), //pb
+	param_screenResolution = S("screenResolution", "sr"), //qb
+	param_viewportSize = S("viewportSize", "vp"), //rb
+	param_javaEnabled = S("javaEnabled", "je"), //sb
+	param_flashVersion = S("flashVersion", "fl"); //tb
+	
+	var param_language = S("language", "ul"), //nb
+	param_encoding = S("encoding", "de"); //ob
 	
 	
 	//====================================常量定义 end====================================
 	
-	var wb = /^(UA|YT|MO|GP)-(\d+)-(\d+)$/, Tracker = function(options) {//pc
+	
+	
+	
+	
+	
+	
+	//====================================跟踪器对象 start====================================
+	
+	var wb = /^(UA|YT|MO|GP)-(\d+)-(\d+)$/,
+	//pc
+	Tracker = function(options) {
         function setData(key, value) {
-            d.b.data.set(key, value)
+            d.dataWrapper.data.set(key, value)
         }
         function addFilter(key, value) {
             setData(key, value);
             d.filters.add(key)
         }
         var d = this;
-        this.b = new DataWrapper;
+        this.dataWrapper = new DataWrapper;
         this.filters = new Filters;
         setData(param_name, options[param_name]);
         setData(param_trackingId, trim(options[param_trackingId]));
@@ -806,12 +631,23 @@
         addFilter(param_buildHitTask, Pa);
         addFilter(param_sendHitTask, Sa);
         addFilter(param_timingTask, Fd(this));
-        Jc(this.b, options[param_clientId]);
-        Kc(this.b);
-        this.b.set(jb, Lc());
-        bd(this.b.get(Na), this.b.get(W), this.b.get(Yb))
-    },
+        setClientId(this.dataWrapper, options[param_clientId]);
+        collect(this.dataWrapper);
+        //this.dataWrapper.set(jb, Lc());
+        //bd(this.b.get(Na), this.b.get(W), this.b.get(Yb))
+    };Tracker.prototype.get = function(a) {
+        return this.b.get(a)
+    };
+    Tracker.prototype.set = function(a, b) {
+        this.b.set(a, b)
+    };
+	//====================================跟踪器对象 end====================================
 	
+	
+	//====================================执行引擎 start====================================
+	
+	//获取执行队列
+	var xaObjName = win[configName] || "xa";
 	
 	//定义好engine
 	var engine = function(){
@@ -822,14 +658,14 @@
 	
 	engine.trackerMap = {}; //h
 	engine.trackerArray = []; //P
-	engine.L = 0; 
+	engine.time = 0; 
 	engine.answer = 42;
     var createParams = [param_trackingId, param_cookieDomain, param_name]; engine.create = function(a) {
         var b = generateOptions(createParams, [].slice.call(arguments));
         b[param_name] || (b[param_name] = "t0");
         var c = "" + b[param_name];
         if (engine.trackerMap[c]) return engine.trackerMap[c];
-        b = new pc(b);
+        b = new Tracker(b);
         engine.trackerMap[c] = b;
         engine.trackerArray.push(b);
         return b
@@ -844,67 +680,33 @@
     }; engine.getAll = function() {
         return engine.trackerArray.slice(0)
     };
-    engine.N = function() {
-        "ga" != gb && J(49);
-        var a = O[gb];
+    engine.start = function() {
+        var a = win[xaObjName];
         if (!a || 42 != a.answer) {
-            N.L = a && a.l;
-            N.loaded = !0;
-            var b = O[gb] = N;
-            X("create", b, b.create);
-            X("remove", b, b.remove);
-            X("getByName", b, b.j, 5);
-            X("getAll", b, b.getAll, 6);
-            b = pc.prototype;
+            engine.time = a && a.l;
+            engine.loaded = !0;
+            var b = win[xaObjName] = engine;
+            //X("create", b, b.create);
+            //X("remove", b, b.remove);
+            //X("getByName", b, b.getByName, 5);
+            //X("getAll", b, b.getAll, 6);
+            b = Tracker.prototype;
             X("get", b, b.get, 7);
             X("set", b, b.set, 4);
             X("send", b, b.send);
-            X("requireSync", b, b.ma);
-            b = Ya.prototype;
+            //X("requireSync", b, b.ma);
+            b = DataWrapper.prototype;
             X("get", b, b.get);
             X("set", b, b.set);
-            if (!Ud() && !Ba) {
-                a: {
-                    for (var b = M.getElementsByTagName("script"), c = 0; c < b.length && 100 > c; c++) {
-                        var d = b[c].src;
-                        if (d && 0 == d.indexOf("https://www.google-analytics.com/analytics")) {
-                            J(33);
-                            b = !0;
-                            break a
-                        }
-                    }
-                    b = !1
-                }
-                b && (Ba = !0)
-            }
-            Ud() || Ba || !Ed(new Od(1E4)) || (J(36), Ba = !0);
-            (O.gaplugins = O.gaplugins || {}).Linker = Dc;
-            b = Dc.prototype;
-            C("linker", Dc);
-            X("decorate", b, b.ca, 20);
-            X("autoLink", b, b.S, 25);
-            C("displayfeatures", fd);
-            C("adfeatures", fd);
+            
+
             a = a && a.q;
-            ka(a) ? Z.D.apply(N, a) : J(50)
+            isArray(a) ? Z.D.apply(engine, a) : console.log("queue is empty!");
         }
-    }; N.da = function() {
-        for (var a = N.getAll(), b = 0; b < a.length; b++) a[b].get(V)
+    }; engine.da = function() {
+        for (var a = engine.getAll(), b = 0; b < a.length; b++) a[b].get(param_name)
     };
 	
-	
-	
-	
-	
-	
-	
-	
-	//获取执行队列
-	var xa = win[configName] || "xa";
-	
-	var E = engine, I = win[xa]; I && I.q ? E() : prepareLoad(E); prepareLoad(function() {
-        //Z.D(["provide", "render", ua])
-    });
 	
 	//预加载
 	var prepareLoad = function(callback) {
@@ -914,7 +716,7 @@
             c = function() {
                 if (!b && !isPrerender(callback)) {
                     b = true;
-                    var d = c,
+                    var d = c;
                     doc.removeEventListener ? doc.removeEventListener("visibilitychange", d, !1) : doc.detachEvent && doc.detachEvent("onvisibilitychange", d)
                 }
             };
@@ -937,11 +739,7 @@
         } catch(e) {
             
         }
-    },
-	
-	
-	
-	
+    };
 	
 	
 	//xa函数参数解析器，用来截取跟踪器及方法
@@ -996,7 +794,7 @@
             if (pp.func) {
 				pp.func.call(win, engine.getByName("t0"));
 			}else {
-                var b = pp.trackerName == gb ? engine: engine.getByName(pp.trackerName);
+                var b = pp.trackerName == xaObjName ? engine : engine.getByName(pp.trackerName);
                 if (pp.isCreate) {
 					"t0" != pp.trackerName || engine.create.apply(engine, pp.params);
 				}else if (pp.isRemove){
@@ -1016,6 +814,16 @@
         } catch(g) {}
     };
 	
+	var X = function (a, b, c, d) {
+        b[a] = function() {
+            try {
+                return c.apply(this, arguments);//d && J(d),
+            } catch(e) {
+                //throw ge("exc", a, e && e.name),
+                //e;
+            }
+        }
+    };
 	
 	//TODO:对应C
 	var doProvide = function(a, b){
@@ -1025,56 +833,16 @@
 	doRequire = function(a, b, c, d, e){
 		
 		
-	}
+	};
+	
+	//====================================执行引擎 end====================================
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//执行
+	var E = engine.start, I = win[xaObjName]; I && I.q ? E() : prepareLoad(E); prepareLoad(function() {
+        //Z.D(["provide", "render", ua])
+    });
 	
 	
 	
