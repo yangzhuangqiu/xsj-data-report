@@ -18,6 +18,7 @@
 	
 	//====================================配置项:start====================================
 	var configName = "XSJAnalyticsConfig";
+	var cookiePrefix = "XA1";
 	//====================================配置项:end====================================
 	
 	
@@ -65,9 +66,9 @@
         return c
     };
 	//ua
-	var emptyFunction = function() {};
+	var emptyFunc = function() {};
 	
-	//P
+	//P->getStringProperty
 	var getStringProperty = function(a, b) {
         var c = a.get(b);
         return void 0 == c ? "": "" + c
@@ -175,12 +176,13 @@
 	//ya
 	getReferrer = function(a) {
         var b = M.referrer;
+		
         if (/^https?:\/\//i.test(b)) {
-            if (a) return b;
-            a = "//" + M.location.hostname;
-            var c = b.indexOf(a);
-            if (5 == c || 6 == c) if (a = b.charAt(c + a.length), "/" == a || "?" == a || "" == a || ":" == a) return;
-            return b
+            //if (a) return b;
+            //a = "//" + M.location.hostname;
+            //var c = b.indexOf(a);
+            //if (5 == c || 6 == c) if (a = b.charAt(c + a.length), "/" == a || "?" == a || "" == a || ":" == a) return;
+            return b;
         }
     },
 	//fc
@@ -228,8 +230,8 @@
     }; dataStore.prototype.map = function(a) {//a为函数，将所有key-value交给函数a处理
         for (var i = 0; i < this.keys.length; i++) {
             var key = this.keys[i],
-            value = this.get(c);
-            value && a(c, d)
+            fieldInstance = this.get(key);
+            fieldInstance && a(key, fieldInstance);
         }
     };	
 	
@@ -242,7 +244,7 @@
         this.setFunc = _setFunc;//o
     };
 	
-	//全局数据存储实例 Qa
+	//全局默认数据存储实例(字段名->字段模型) Qa
 	var dataStoreInstance = new dataStore;
 	//$a
 	var getValueInDataStoreInstance = function(key) {
@@ -284,7 +286,7 @@
             }
         } catch(d) {}
         b = a.get(param_hitCallback);
-        b != emptyFunction && isFunction(b) && (a.set(param_hitCallback, emptyFunction, !0), setTimeout(b, 10))
+        b != emptyFunc && isFunction(b) && (a.set(param_hitCallback, emptyFunc, !0), setTimeout(b, 10))
     };
 	
 	//====================================数据存储模型 end====================================
@@ -296,18 +298,19 @@
 	var Ma = function (a) {
         //if (G(P(a, Na))) throw "abort";Na->param_trackingId
     },
-	
-	cd = function () {
-        //if (win.navigator && "preview" == win.navigator.loadPurpose) throw "abort";
+	//cd
+	previewTaskFunc = function () {
+        if (win.navigator && "preview" == win.navigator.loadPurpose) throw "abort";
     },
-	
-	Oa = function () {
-        //var a = doc.location.protocol;
-        //if ("http:" != a && "https:" != a) throw "abort";
+	//Oa
+	checkProtocolTaskFunc = function () {
+        var a = doc.location.protocol;
+        if ("http:" != a && "https:" != a) throw "abort";
     },
-	
-	vb = function (a) {
-        //if (!a.get(param_trackingId)) throw "abort";
+	//vb
+	validationTaskFunc = function (a) {
+		if (!a.get(param_appId)) throw "abort";
+        if (!a.get(param_trackingId)) throw "abort";
     },
 	
 	
@@ -317,7 +320,7 @@
         c = trimFirstDot(getStringProperty(a, param_cookieDomain)).split(".").length;
         a = getDeepByPath(getStringProperty(a, param_cookiePath));
         1 < a && (c += "-" + a);
-        return ["GA1", c, b].join(".")
+        return [cookiePrefix, c, b].join(".")
     };
 	//setCookie = function(name, value, path, domain, trackingId, expires)
 	//hc->hasSetTrackerCookieValue,mc->setTrackerCookieValue
@@ -353,63 +356,24 @@
             }
         }
     },
-	nc = function(a) {
-        //if ("cookie" == P(a, ac) && !hc && (mc(a), !hc)) throw "abort";
-    },
-	//TODO
-	Yc = function(a) {
-        
-    },
-	Ja = function (a) {
-        //if (100 != a.get(Ka) && La(P(a, Q)) % 1E4 >= 100 * R(a, Ka)) throw "abort";
-    },
-	
-	
-	
-	
-	Ta = function (a) {
-        
-    },
-	
-	Hc = function (a) { 
-	
-    },
-	
-	yd = function (a) {
-        //var b = win.gaDevIds;
-        //isArray(b) && 0 != b.length && a.set("&did", b.join(","), !0)
+	//nc
+	checkStorageTaskFunc = function(a) {
+        if ("cookie" == getStringProperty(a, param_storage) && !hasSetTrackerCookieValue && (setTrackerCookieValue(a), !hasSetTrackerCookieValue)) throw "abort";
     };
 	
 	
-	var oc = function() {
-		//return "http://www.noshadow.me";
-        return (isForceSSL || isHttps() ? "https:": "http:") + "//www.google-analytics.com"
-    };
-	//可能很重要,设置上报接口地址
-	var Sd = function(a) {
-        if (!a.get("dcLoaded") && "cookie" == a.get(param_storage)) {
-            //Nd(a, 51);
-            //var b = new Jd(a);
-            //Pd(b, a);
-            //Qd(b, a);
-            //a.get(b.U) && (a.set(Md, 1, !0), a.set(param_transportUrl, oc() + "/r/collect", !0))
-        }
+	//oc->getReportUrl,r->report,c->collect/client
+	var getReportUrl = function() {
+		return "http://data.xoyo.com/r/c";
     };
 	
-	
-	
-	
-	
-	var Pa = function (a) {
-        try {
-            win.navigator.sendBeacon ? 1 : win.XMLHttpRequest && "withCredentials" in new win.XMLHttpRequest && 1
-        } catch(c) {}
-        //a.set(ld, Td(a), !0);TODO UNKNOWN
-        a.set(param__s, getNumberProperty(a, param__s) + 1);
+
+	//Pa->buildHitTaskFunc
+	var buildHitTaskFunc = function (a) {
         var b = [];
-        dataStoreInstance.map(function(c, d) {
+        dataStoreInstance.map(function(key, d) {
             if (d.alias) {
-                var e = a.get(c);
+                var e = a.get(key);
                 void 0 != e && e != d.defaultValue && ("boolean" == typeof e && (e *= 1), b.push(d.alias + "=" + encURI("" + e)))
             }
         });
@@ -417,10 +381,78 @@
         a.set(param_hitPayload, b.join("&"), !0)
     },
 	
-	//TODO
-	Sa = function (a) {
-        
+	//Sa->sendHitTaskFunc
+	sendHitTaskFunc = function (a) {
+		//上报url
+        var b = getStringProperty(a, param_transportUrl) || getReportUrl(),
+        c = getStringProperty(a, param_transport); ! c && a.get(param_useBeacon) && (c = "beacon");
+        if (c) {
+            var d = getStringProperty(a, param_hitPayload),
+            e = a.get(param_hitCallback),
+            e = e || emptyFunc;//ua->emptyFunc
+            "image" == c ? reportByImg(b, d, e) : "xhr" == c && reportByAjax(b, d, e) || "beacon" == c && reportByBeancon(b, d, e) || reportByAuto(b, d, e)
+        } else {
+			reportByAuto(b, getStringProperty(a, param_hitPayload), a.get(param_hitCallback));
+		}
+
+        a.set(param_hitCallback, emptyFunc, !0)
     },
+	
+	
+	//ta
+	createImgElement = function(a) {
+        var b = M.createElement("img");
+        b.width = 1;
+        b.height = 1;
+        b.src = a;
+        return b
+    },
+	Da = function(a) {
+        this.name = "len";
+        this.message = a + "-8192"
+    },
+	//ba
+    reportByAuto = function(a, b, c) {
+        c = c || emptyFunc;
+        if (2036 >= b.length) reportByImg(a, b, c);
+        else if (8192 >= b.length) reportByBeancon(a, b, c) || reportByAjax(a, b, c) || reportByImg(a, b, c);
+        else throw reportError("len", b.length),
+        new Da(b.length);
+    },
+	//wc
+    reportByImg = function(a, b, c) {
+        var d = createImgElement(a + "?" + b);
+        d.onload = d.onerror = function() {
+            d.onload = null;
+            d.onerror = null;
+            c()
+        }
+    },
+	//wd
+    reportByAjax = function(a, b, c) {
+        var d = O.XMLHttpRequest;
+        if (!d) return ! 1;
+        var e = new d;
+        if (! ("withCredentials" in e)) return ! 1;
+        e.open("POST", a, !0);
+        e.withCredentials = !0;
+        e.setRequestHeader("Content-Type", "text/plain");
+        e.onreadystatechange = function() {
+            4 == e.readyState && (c(), e = null)
+        };
+        e.send(b);
+        return ! 0
+    },
+	//x
+    reportByBeancon = function(a, b, c) {
+        return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
+    },
+	//ge
+    reportError = function(a, b, c) {
+        //1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j47", "sr=1"], b && a.push("_f=" + b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(oc() + "/collect", a.join("&"), ua))
+    };
+	
+	
 	//TODO
 	Fd = function(a) {
         
@@ -440,7 +472,7 @@
 					var g;
 					g = d[e].split(".");
 					var ca = g.shift();
-					("GA1" == ca) && 1 < g.length ? (ca = g.shift().split("-"), 1 == ca.length && (ca[1] = "1"), ca[0] *= 1, ca[1] *= 1, g = {
+					(cookiePrefix == ca) && 1 < g.length ? (ca = g.shift().split("-"), 1 == ca.length && (ca[1] = "1"), ca[0] *= 1, ca[1] *= 1, g = {
 						H: ca,
 						s: g.join(".")
 					}) : g = void 0;
@@ -515,67 +547,98 @@
         return a.name
     };
 	
+	var param_apiVersion = T("apiVersion", "v"), //hb->
+	param_clientVersion = T("clientVersion", "_v");//ib->
 	
-	var param__oot= T("_oot"), //Qb
-	param_previewTask = S("previewTask"), //dd
-	param_checkProtocolTask = S("checkProtocolTask"), //Rb
-	param_validationTask = S("validationTask"), //md
-	param_checkStorageTask = S("checkStorageTask"), //Sb
-	param_historyImportTask = S("historyImportTask"), //Uc
-	param_samplerTask = S("samplerTask"), //Tb
-	param__rlt = S("_rlt"), //Vb
-	param_buildHitTask = S("buildHitTask"), //Wb
-	param_sendHitTask = S("sendHitTask"), //Xb
-	param_ceTask = S("ceTask"), //Vc
-	param_devIdTask = S("devIdTask"), //zd
-	param_timingTask = S("timingTask"), //Cd
-	param_displayFeaturesTask = S("displayFeaturesTask"), //Ld
-	param_name = T("name"), //V
-	param_clientId = T("clientId", "cid"), //Q
-	param_clientIdTime = T("clientIdTime"), //n
-	param_userId = S("userId", "uid"), //Ad
-	param_trackingId = T("trackingId", "tid"), //Na
-	param_cookieName = T("cookieName", void 0, "_ga"), //U
-	param_cookieDomain = T("cookieDomain"), //W
-	param_cookiePath = T("cookiePath", void 0, "/"), //Yb
-	param_cookieExpires = T("cookieExpires", void 0, 63072E3), //Zb
-	param_legacyCookieDomain = T("legacyCookieDomain"), //$b
-	param_legacyHistoryImport = T("legacyHistoryImport", void 0, !0), //Wc
-	param_storage = T("storage", void 0, "cookie"), //ac
-	param_allowLinker = T("allowLinker", void 0, !1), //bc
-	param_allowAnchor = T("allowAnchor", void 0, !0), //cc
-	param_sampleRate = T("sampleRate", "sf", 100), //Ka
-	param_siteSpeedSampleRate = T("siteSpeedSampleRate", void 0, 1), //dc
-	param_alwaysSendReferrer = T("alwaysSendReferrer", void 0, !1), //ec
-	param_transportUrl = S("transportUrl"), //gd
-	param__r = S("_r", "_r");//Md
-	
-	var param_adSenseId = S("adSenseId", "a"), //jb
-	param_hitType = S("hitType", "t"), //Va
-	param_hitCallback = S("hitCallback"), //Ia
-	param_hitPayload = S("hitPayload"); //Ra
-
-	var param_apiVersion = T("apiVersion", "v"), //hb
-	param_clientVersion = T("clientVersion", "_v");//ib
-	
-	var param__s = S("_s", "_s");//Ac
+	var param_adSenseId = S("adSenseId", "a"), //jb->
+	param_hitType = S("hitType", "t"), //Va->
+	param_hitCallback = S("hitCallback"), //Ia->
+	param_hitPayload = S("hitPayload"); //Ra->
 	
 	//
-	var param_location = S("location", "dl", ""), //kb
-	param_referrer = S("referrer", "dr"),//lb
-	param_page = S("page", "dp", ""); //mb
-	S("hostname", "dh");
+	var param_location = S("location", "dl", ""), //kb->
+	param_referrer = S("referrer", "dr"),//lb->
+	param_page = S("page", "dp", ""); //mb->
+	S("hostname", "dh", function(){return M.location.hostname});
 	
-	var param_screenColors = S("screenColors", "sd"), //pb
-	param_screenResolution = S("screenResolution", "sr"), //qb
-	param_viewportSize = S("viewportSize", "vp"), //rb
-	param_javaEnabled = S("javaEnabled", "je"), //sb
-	param_flashVersion = S("flashVersion", "fl"); //tb
+	var param_language = S("language", "ul"), //nb->
+	param_encoding = S("encoding", "de"); //ob->
+	S("title", "dt",
+    function() {
+        return M.title || void 0
+    });
 	
-	var param_language = S("language", "ul"), //nb
-	param_encoding = S("encoding", "de"); //ob
+	var param_screenColors = S("screenColors", "sd"), //pb->
+	param_screenResolution = S("screenResolution", "sr"), //qb->
+	param_viewportSize = S("viewportSize", "vp"), //rb->
+	param_javaEnabled = S("javaEnabled", "je"), //sb->
+	param_flashVersion = S("flashVersion", "fl"); //tb->
+	
+	var param__oot= T("_oot"), //Qb->
+	param_previewTask = S("previewTask"), //dd->
+	param_checkProtocolTask = S("checkProtocolTask"), //Rb->
+	param_validationTask = S("validationTask"), //md->
+	param_checkStorageTask = S("checkStorageTask"), //Sb->
+	param_historyImportTask = S("historyImportTask"), //Uc->
+	param_samplerTask = S("samplerTask"), //Tb->
+	param__rlt = S("_rlt"), //Vb->
+	param_buildHitTask = S("buildHitTask"), //Wb->
+	param_sendHitTask = S("sendHitTask"), //Xb->
+	param_ceTask = S("ceTask"), //Vc->
+	param_devIdTask = S("devIdTask"), //zd->
+	param_timingTask = S("timingTask"), //Cd->
+	param_displayFeaturesTask = S("displayFeaturesTask"), //Ld->
+	param_name = T("name"), //V->
+	param_clientId = T("clientId", "cid"), //Q->
+	param_clientIdTime = T("clientIdTime"), //n->
+	param_userId = S("userId", "uid"), //Ad->
+	param_appId = S("appId", "aid", ""),//
+	param_trackingId = T("trackingId", "tid"), //Na->
+	
+	param_cookieName = T("cookieName", void 0, "_xa"), //U->
+	param_cookieDomain = T("cookieDomain"), //W->
+	param_cookiePath = T("cookiePath", void 0, "/"), //Yb->
+	param_cookieExpires = T("cookieExpires", void 0, 63072E3), //Zb->
+	param_legacyCookieDomain = T("legacyCookieDomain"), //$b->
+	param_legacyHistoryImport = T("legacyHistoryImport", void 0, !0), //Wc->
+	param_storage = T("storage", void 0, "cookie"), //ac->
+	param_allowLinker = T("allowLinker", void 0, !1), //bc->
+	param_allowAnchor = T("allowAnchor", void 0, !0), //cc->
+	param_sampleRate = T("sampleRate", "sf", 100), //Ka->
+	param_siteSpeedSampleRate = T("siteSpeedSampleRate", void 0, 1), //dc->
+	param_alwaysSendReferrer = T("alwaysSendReferrer", void 0, !1), //ec->
+	param_transportUrl = S("transportUrl"), //gd->
+	param__r = S("_r", "_r");//Md->
+	
+	var param_useBeacon = S("useBeacon", void 0, !1), //Vd->
+	param_transport = S("transport"); //fa->
+	S("sessionControl", "sc", ""); 
+	S("sessionGroup", "sg"); 
+	S("queueTime", "qt");
 	
 	
+
+	
+	
+	var param__s = S("_s", "_s");//Ac->
+	
+	
+	
+	
+	
+	
+	
+	var param_eventCategory = S("eventCategory", "ec"), //ub->
+	param_eventAction = S("eventAction", "ea"), //xb->
+	param_eventLabel = S("eventLabel", "el"), //yb->
+	param_eventValue = S("eventValue", "ev"), //zb->
+	param_socialNetwork = S("socialNetwork", "sn"), //Bb->
+	param_socialAction = S("socialAction", "sa"), //Cb->
+	param_socialTarget = S("socialTarget", "st"), //Db->
+	param_timingCategory = S("timingCategory", "utc"), //Mb->
+	param_timingVar = S("timingVar", "utv"), //Nb->
+	param_timingLabel = S("timingLabel", "utl"), //Ob->
+	param_timingValue = S("timingValue", "utt");//Pb->
 	//====================================常量定义 end====================================
 	
 	
@@ -600,9 +663,10 @@
         this.dataWrapper = new DataWrapper;
         this.filters = new Filters;
         setData(param_name, options[param_name]);
-        setData(param_trackingId, trim(options[param_trackingId]));
+        setData(param_appId, trim(options[param_appId]));
+		setData(param_trackingId, trim(options[param_trackingId]));
         setData(param_cookieName, options[param_cookieName]);
-        setData(param_cookieDomain, options[param_cookieDomain] || getHostName());
+        setData(param_cookieDomain, options[param_cookieDomain] || "auto");//getHostName());
         setData(param_cookiePath, options[param_cookiePath]);
         setData(param_cookieExpires, options[param_cookieExpires]);
         setData(param_legacyCookieDomain, options[param_legacyCookieDomain]);
@@ -617,19 +681,19 @@
         setData(param_clientIdTime, options[param_clientIdTime]);
 		setData(param_apiVersion, 1);
         setData(param_clientVersion, "j47");
-        addFilter(param__oot, Ma);
-        addFilter(param_previewTask, cd);
-        addFilter(param_checkProtocolTask, Oa);
-        addFilter(param_validationTask, vb);
-        addFilter(param_checkStorageTask, nc);
-        addFilter(param_historyImportTask, Yc);
-        addFilter(param_samplerTask, Ja);
-        addFilter(param__rlt, Ta);
-        addFilter(param_ceTask, Hc);
-        addFilter(param_devIdTask, yd);
-        addFilter(param_displayFeaturesTask, Sd);
-        addFilter(param_buildHitTask, Pa);
-        addFilter(param_sendHitTask, Sa);
+        //addFilter(param__oot, Ma);
+        addFilter(param_previewTask, previewTaskFunc);
+        addFilter(param_checkProtocolTask, checkProtocolTaskFunc);
+        addFilter(param_validationTask, validationTaskFunc);
+        addFilter(param_checkStorageTask, checkStorageTaskFunc);
+        //addFilter(param_historyImportTask, Yc);
+        //addFilter(param_samplerTask, Ja);
+        //addFilter(param__rlt, Ta);
+        //addFilter(param_ceTask, Hc);
+        //addFilter(param_devIdTask, yd);
+        //addFilter(param_displayFeaturesTask, Sd);
+        addFilter(param_buildHitTask, buildHitTaskFunc);
+        addFilter(param_sendHitTask, sendHitTaskFunc);
         addFilter(param_timingTask, Fd(this));
         setClientId(this.dataWrapper, options[param_clientId]);
         collect(this.dataWrapper);
@@ -640,6 +704,25 @@
     };
     Tracker.prototype.set = function(a, b) {
         this.b.set(a, b)
+    };
+	//qc->sendType
+	var sendType = {
+        pageview: [param_page],//mb
+        event: [param_eventCategory, param_eventAction, param_eventLabel, param_eventValue],
+        social: [param_socialNetwork, param_socialAction, param_socialTarget],
+        timing: [param_timingCategory, param_timingVar, param_timingValue, param_timingLabel]
+    };
+	
+	Tracker.prototype.send = function(a) {
+        if (! (1 > arguments.length)) {
+            var b, c;
+            "string" === typeof arguments[0] ? (b = arguments[0], c = [].slice.call(arguments, 1)) : (b = arguments[0] && arguments[0][param_hitType], c = arguments);
+            b && (c = generateOptions(sendType[b] || [], c), c[param_hitType] = b, this.dataWrapper.set(c, void 0, !0), this.filters.D(this.dataWrapper), this.dataWrapper.data.m = {})
+        }
+    };
+	//ma
+    Tracker.prototype.requireSync = function(a, b) {
+        
     };
 	//====================================跟踪器对象 end====================================
 	
@@ -660,7 +743,8 @@
 	engine.trackerArray = []; //P
 	engine.time = 0; 
 	engine.answer = 42;
-    var createParams = [param_trackingId, param_cookieDomain, param_name]; engine.create = function(a) {
+	//createParams = [param_trackingId, param_cookieDomain, param_name]; //
+    var createParams = [param_appId, param_trackingId, param_name]; engine.create = function(a) {
         var b = generateOptions(createParams, [].slice.call(arguments));
         b[param_name] || (b[param_name] = "t0");
         var c = "" + b[param_name];
@@ -686,15 +770,15 @@
             engine.time = a && a.l;
             engine.loaded = !0;
             var b = win[xaObjName] = engine;
-            //X("create", b, b.create);
-            //X("remove", b, b.remove);
-            //X("getByName", b, b.getByName, 5);
-            //X("getAll", b, b.getAll, 6);
+            X("create", b, b.create);
+            X("remove", b, b.remove);
+            X("getByName", b, b.getByName, 5);
+            X("getAll", b, b.getAll, 6);
             b = Tracker.prototype;
             X("get", b, b.get, 7);
             X("set", b, b.set, 4);
             X("send", b, b.send);
-            //X("requireSync", b, b.ma);
+            X("requireSync", b, b.requireSync);
             b = DataWrapper.prototype;
             X("get", b, b.get);
             X("set", b, b.set);

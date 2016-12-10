@@ -6,20 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<title>noshadow:talk with soul</title>
-		<script>
-			(function(){
-				//a = /^(?:(\w+)\.)?(?:(\w+):)?(\w+)$/
-				//x = a.exec("a.d:b");
-				
-				
-				var a = [];
-				a.push("a");
-				a.push("b");
-				a.push("a");
-				console.log(a)
-				
-			})();
-		</script>
+		
 		<script>
 			
 			(function(i,s,o,g,r,a,m){i['XSJAnalyticsConfig']=r;i[r]=i[r]||function(){
@@ -29,9 +16,11 @@
 
 			//xa('create', {appId:"aa",trackingId:"bb"});
 			xa('create', 'UA-Yang-X', 'auto');
-			//xa('send', {appId:"aa",trackingId:"bb"});
+			xa('send', 'pageview');
+			xa('create', 'UA-xxx-Z', 'my.test.com', 'clientTracker');
+			xa('clientTracker.send', 'pageview')
 			xa(function(tracker){
-				console.log(tracker);
+				console.log(xa.getAll());
 			})
 			
 			
@@ -40,7 +29,7 @@
 	</head>
 	<body>
 		你好
-		<a href="report2.html" target="_self">click</a>
+		<a href="xsj_analytics_test.html" target="_blank">click</a>
 	</body>
 	
 
